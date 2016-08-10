@@ -1,0 +1,63 @@
+buildscript {
+    repositories {
+    	mavenCentral()
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE'
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
+    }
+}
+
+group = 'cafebinario'
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'docker'
+
+jar {
+    baseName = 'cafebinario'
+    version =  '0.0.1'
+}
+
+repositories {
+    mavenCentral()
+    maven{
+   			url 'https://code.lds.org/nexus/content/groups/main-repo'
+    	}
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'org.springframework.boot:spring-boot-starter-mail'
+    compile 'com.oracle:ojdbc7:12.1.0.2'
+    compile 'org.jasypt:jasypt:1.9.2'
+    compile 'com.h2database:h2'
+    
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
+
+docker {
+    hostUrl 'http://192.168.99.100:2376'
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+  push = true
+  applicationName = jar.baseName
+  dockerfile = file('src/main/docker/Dockerfile')
+  doFirst {
+    copy {
+      from jar
+      into stageDir
+    }
+  }
+}
