@@ -17,12 +17,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.cafebinario.exception.ConfirmUserException;
 import br.com.cafebinario.main.Main;
-import br.com.cafebinario.register.RegisterFacade;
+import br.com.cafebinario.register.UserAccountRegisterFacade;
 import br.com.cafebinario.register.config.JUnitConfig;
-import br.com.cafebinario.register.vo.NewUserVO;
-import br.com.cafebinario.register.vo.result.ResultVO;
-import br.com.cafebinario.register.vo.result.UserListResultVO;
 import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
+import br.com.cafebinario.register.vo.result.user.ResultVO;
+import br.com.cafebinario.register.vo.result.user.UserListResultVO;
+import br.com.cafebinario.register.vo.user.NewUserVO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = { Main.class })
@@ -33,7 +33,7 @@ public class RegisterUserControllerTest {
 	private TestRestTemplate testRestTemplate;
 
 	@MockBean
-	private RegisterFacade registerFacade;
+	private UserAccountRegisterFacade registerFacade;
 
 	private NewUserVO userVO;
 	private UserListResultVO userListResultVO;
@@ -50,7 +50,7 @@ public class RegisterUserControllerTest {
 	public void registerSUCCESS() {
 		BDDMockito.given(this.registerFacade.newUser(userVO)).willReturn(ResultVOBuilder.SUCCESS());
 
-		ResponseEntity<ResultVO> resultVONewUser = testRestTemplate.postForEntity("/register/new", this.userVO,
+		ResponseEntity<ResultVO> resultVONewUser = testRestTemplate.postForEntity("/user/new", this.userVO,
 				ResultVO.class);
 		Assert.assertEquals(resultVONewUser.getStatusCode(), HttpStatus.OK);
 		Assert.assertEquals(resultVONewUser.getBody(), ResultVOBuilder.SUCCESS());
@@ -66,10 +66,10 @@ public class RegisterUserControllerTest {
 	public void lastedTenSUCCESS() throws ConfirmUserException {
 		BDDMockito.given(this.registerFacade.lastTen()).willReturn(userListResultVO);
 
-		ResponseEntity<UserListResultVO> resultVOLastTen = testRestTemplate.getForEntity("/register",
+		ResponseEntity<UserListResultVO> resultVOLastTen = testRestTemplate.getForEntity("/user/lastTen",
 				UserListResultVO.class);
 
-		Assert.assertEquals(resultVOLastTen.getStatusCode(), HttpStatus.OK);
+		Assert.assertEquals(HttpStatus.OK, resultVOLastTen.getStatusCode());
 		Assert.assertEquals(resultVOLastTen.getBody().getResult(), ResultVOBuilder.SUCCESS());
 		Assert.assertEquals(resultVOLastTen.getBody().getUserList(), userListResultVO.getUserList());
 	}

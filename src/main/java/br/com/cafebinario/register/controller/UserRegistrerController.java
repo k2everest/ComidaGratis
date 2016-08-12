@@ -14,44 +14,44 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.cafebinario.exception.ConfirmUserException;
-import br.com.cafebinario.register.RegisterFacade;
-import br.com.cafebinario.register.vo.UserAuthenticationVO;
-import br.com.cafebinario.register.vo.NewUserVO;
-import br.com.cafebinario.register.vo.result.AuthenticationResultVO;
-import br.com.cafebinario.register.vo.result.ResultVO;
-import br.com.cafebinario.register.vo.result.UserListResultVO;
+import br.com.cafebinario.register.UserAccountRegisterFacade;
+import br.com.cafebinario.register.vo.result.user.AuthenticationResultVO;
+import br.com.cafebinario.register.vo.result.user.ResultVO;
+import br.com.cafebinario.register.vo.result.user.UserListResultVO;
+import br.com.cafebinario.register.vo.user.NewUserVO;
+import br.com.cafebinario.register.vo.user.UserAuthenticationVO;
 
 @RestController
-@RequestMapping("/register")
+@RequestMapping("/user")
 public class UserRegistrerController {
 
 	@Autowired
-	private RegisterFacade registerFacade;
+	private UserAccountRegisterFacade userAccountRegisterFacade;
 
-	@RequestMapping(path = "", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(path = "/lastTen", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public UserListResultVO lastedTenRegisters() {
-		return registerFacade.lastTen();
+		return userAccountRegisterFacade.lastTen();
 
 	}
 
 	@RequestMapping(path = "/new", method = RequestMethod.POST, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public @ResponseBody ResultVO userRegister(@Valid @RequestBody final NewUserVO userVO) {
-		ResultVO resultVO = registerFacade.newUser(userVO);
+		final ResultVO resultVO = userAccountRegisterFacade.newUser(userVO);
 		return resultVO;
 	}
 
 	@RequestMapping(path = "/confirm", method = RequestMethod.PUT)
 	public void confirmRegister(@RequestParam(name = "secureKey", required = true) final String secureKey)
 			throws ConfirmUserException {
-		registerFacade.confirmUser(secureKey);
+		userAccountRegisterFacade.confirmUser(secureKey);
 	}
 
 	@RequestMapping(path = "/authentication", method = RequestMethod.POST, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public @ResponseBody ResponseEntity<AuthenticationResultVO> userAuthentication(
 			@Valid @RequestBody final UserAuthenticationVO userVO) {
-		AuthenticationResultVO authenticationResultVO = registerFacade.auth(userVO);
+		final AuthenticationResultVO authenticationResultVO = userAccountRegisterFacade.auth(userVO);
 		return ResponseEntity.ok(authenticationResultVO);
 	}
 	
@@ -59,7 +59,7 @@ public class UserRegistrerController {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public @ResponseBody UserAuthenticationVO getUserByToken(
 			@PathVariable(value="token") final String token) {
-		UserAuthenticationVO userAuthenticationVO = registerFacade.getUserAuthenticationVOByToken(token);
+		final UserAuthenticationVO userAuthenticationVO = userAccountRegisterFacade.getUserAuthenticationVOByToken(token);
 		return userAuthenticationVO;
 	}
 }

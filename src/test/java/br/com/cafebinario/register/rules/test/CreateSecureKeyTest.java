@@ -9,9 +9,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Base64Utils;
 
 import br.com.cafebinario.main.Main;
-import br.com.cafebinario.register.rules.CreateSecureKeyRules;
-import br.com.cafebinario.register.rules.DecriptyDataRules;
-import br.com.cafebinario.register.vo.NewUserVO;
+import br.com.cafebinario.register.rules.user.CreateSecureKeyRules;
+import br.com.cafebinario.register.rules.user.DecriptyDataRules;
+import br.com.cafebinario.register.vo.user.NewUserVO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { Main.class })

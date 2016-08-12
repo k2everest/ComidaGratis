@@ -9,9 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.cafebinario.entiry.UserAccount;
 import br.com.cafebinario.main.Main;
-import br.com.cafebinario.register.entiry.UserAccount;
-import br.com.cafebinario.register.rules.FindUserBySecureKeyRules;
+import br.com.cafebinario.register.rules.user.FindUserBySecureKeyRules;
 import br.com.cafebinario.repository.UserAccountRepository;
 
 @RunWith(SpringRunner.class)

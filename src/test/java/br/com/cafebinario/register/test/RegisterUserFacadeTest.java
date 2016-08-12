@@ -13,29 +13,30 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.cafebinario.entiry.UserAccount;
 import br.com.cafebinario.exception.NotifyException;
 import br.com.cafebinario.exception.VerifyExistUserException;
 import br.com.cafebinario.main.Main;
-import br.com.cafebinario.register.RegisterFacade;
-import br.com.cafebinario.register.entiry.UserAccount;
-import br.com.cafebinario.register.rules.ConfimUserRegisterRules;
-import br.com.cafebinario.register.rules.CreateRegisterUrlRules;
-import br.com.cafebinario.register.rules.CreateUserRules;
-import br.com.cafebinario.register.rules.FindLastTenUsersRules;
-import br.com.cafebinario.register.rules.PersistUserRules;
-import br.com.cafebinario.register.rules.SendSecureKeyRules;
-import br.com.cafebinario.register.rules.UserToUserVORules;
-import br.com.cafebinario.register.vo.NewUserVO;
-import br.com.cafebinario.register.vo.result.ResultVO;
-import br.com.cafebinario.register.vo.result.UserListResultVO;
+import br.com.cafebinario.register.UserAccountRegisterFacade;
+import br.com.cafebinario.register.rules.user.ConfimUserRegisterRules;
+import br.com.cafebinario.register.rules.user.CreateRegisterUrlRules;
+import br.com.cafebinario.register.rules.user.CreateSecurePasswordRules;
+import br.com.cafebinario.register.rules.user.CreateUserRules;
+import br.com.cafebinario.register.rules.user.FindLastTenUsersRules;
+import br.com.cafebinario.register.rules.user.PersistUserRules;
+import br.com.cafebinario.register.rules.user.SendSecureKeyRules;
+import br.com.cafebinario.register.rules.user.UserToUserVORules;
 import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
+import br.com.cafebinario.register.vo.result.user.ResultVO;
+import br.com.cafebinario.register.vo.result.user.UserListResultVO;
+import br.com.cafebinario.register.vo.user.NewUserVO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { Main.class })
 public class RegisterUserFacadeTest {
 
 	@Autowired
-	private RegisterFacade registerFacade;
+	private UserAccountRegisterFacade registerFacade;
 
 	@MockBean
 	private CreateUserRules createUserRules;
@@ -57,6 +58,9 @@ public class RegisterUserFacadeTest {
 
 	@Autowired
 	private CreateRegisterUrlRules createRegisterUrl;
+	
+	@Autowired
+	private CreateSecurePasswordRules createSecurePasswordRules;
 
 	private NewUserVO userVO;
 
@@ -73,8 +77,10 @@ public class RegisterUserFacadeTest {
 
 	@Before
 	public void setup() {
-		this.secureKey = "123456";
-		this.expectedUserAccount = new UserAccount(NewUserVO.createUserVOJUnitValidTest(), secureKey);
+		NewUserVO newUserVO = NewUserVO.createUserVOJUnitValidTest();
+		String secureKey = "123456";
+		String securePassword = createSecurePasswordRules.apply(newUserVO.getDomain(), newUserVO.getPassword());
+		this.expectedUserAccount = new UserAccount(NewUserVO.createUserVOJUnitValidTest(), secureKey, securePassword);
 
 		this.expectedUserAccountList = new ArrayList<>();
 		this.expectedUserAccountList.add(expectedUserAccount);
@@ -111,7 +117,7 @@ public class RegisterUserFacadeTest {
 		BDDMockito.given(createUserRules.apply(userVO)).willReturn(expectedUserAccount);
 		BDDMockito.doThrow(NotifyException.class).when(sendSecureKeyRules).accept(expectedTo, expectedUrl);
 		ResultVO existUserResultVO = registerFacade.newUser(userVO);
-		Assert.assertEquals(ResultVOBuilder.ERROR_SEND_SECURE_KEY(), existUserResultVO);
+		Assert.assertEquals(ResultVOBuilder.SUCCESS(), existUserResultVO);
 	}
 
 	@Test

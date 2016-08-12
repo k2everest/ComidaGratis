@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.cafebinario.main.Main;
-import br.com.cafebinario.register.rules.CreateRegisterUrlRules;
+import br.com.cafebinario.register.rules.user.CreateRegisterUrlRules;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { Main.class })

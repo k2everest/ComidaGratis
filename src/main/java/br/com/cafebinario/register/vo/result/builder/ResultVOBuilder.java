@@ -1,6 +1,6 @@
 package br.com.cafebinario.register.vo.result.builder;
 
-import br.com.cafebinario.register.vo.result.ResultVO;
+import br.com.cafebinario.register.vo.result.user.ResultVO;
 
 public class ResultVOBuilder {
 	

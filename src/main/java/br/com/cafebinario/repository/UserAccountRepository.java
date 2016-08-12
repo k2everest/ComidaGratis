@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import br.com.cafebinario.register.entiry.UserAccount;
+import br.com.cafebinario.entiry.UserAccount;
 
 @Repository
 public interface UserAccountRepository extends JpaRepository<UserAccount, String>{
@@ -16,5 +16,5 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, String
 	UserAccount findByNickOrSecureKey(final String nick, final String secureKey);
 
 	@Query("select u from UserAccount u where u.email = ?1 or u.nick = ?2")
-	UserAccount existUserByEmailOrNick(String email, String nick);
+	UserAccount existUserByEmailOrNick(final String email, final String nick);
 }

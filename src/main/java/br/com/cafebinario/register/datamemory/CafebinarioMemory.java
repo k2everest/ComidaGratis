@@ -17,7 +17,7 @@ import org.apache.tomcat.jni.Time;
 import org.springframework.util.Assert;
 import org.springframework.util.Base64Utils;
 
-import br.com.cafebinario.register.vo.UserAuthenticationVO;
+import br.com.cafebinario.register.vo.user.UserAuthenticationVO;
 
 public final class CafebinarioMemory {
 
@@ -61,22 +61,21 @@ public final class CafebinarioMemory {
 		return memory.isEmpty();
 	}
 
-	public boolean containsKey(String key) {
+	public boolean containsKey(final String key) {
 		return memory.containsKey(key);
 	}
 
-	public UserAuthenticationVO get(String key) {
-		UserAuthenticationVO userAuthenticationVO = null;
+	public UserAuthenticationVO get(final String key) {
 		final SecureMemoryData secureMemoryData = memory.get(key);
 
 		Assert.notNull(secureMemoryData);
 
 		/**
-		 * TODO SecureMemoryData já está em memória e já possui objeto com
-		 * timestamp para verificar se está em tempo válido o código abaixo tem
-		 * apenas o objetivo de testar a chave. A questão aqui é que a chave
-		 * será sempre válida, senão não estaria em mémoria... avaliar se existe
-		 * algum motivo para esse teste. (que é bem pouco performatico!)
+		 * TODO SecureMemoryData ja esta em memoria e ja possui objeto com
+		 * timestamp para verificar se esta em tempo valido o codigo abaixo tem
+		 * apenas o objetivo de testar a chave. A questao aqui eh que a chave
+		 * sera sempre valida, senao nao estaria em memoria... avaliar se existe
+		 * algum motivo para esse teste. (que eh bem pouco performatico!)
 		 */
 		CipherInputStream cipherInputStream = null;
 		try {
@@ -96,7 +95,7 @@ public final class CafebinarioMemory {
 					.split("[|]");
 			int i = 0;
 
-			userAuthenticationVO = new UserAuthenticationVO();
+			final UserAuthenticationVO userAuthenticationVO = new UserAuthenticationVO();
 			userAuthenticationVO.setDomain(pipeDelimiterObjectString[i++]);
 			userAuthenticationVO.setEmail(pipeDelimiterObjectString[i++]);
 			userAuthenticationVO.setNick(pipeDelimiterObjectString[i++]);

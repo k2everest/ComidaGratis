@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.cafebinario.exception.VerifyExistUserException;
 import br.com.cafebinario.main.Main;
-import br.com.cafebinario.register.rules.VerifyExistUserRules;
+import br.com.cafebinario.register.rules.user.VerifyExistUserRules;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { Main.class })

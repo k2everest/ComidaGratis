@@ -14,9 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.cafebinario.entiry.UserAccount;
 import br.com.cafebinario.main.Main;
-import br.com.cafebinario.register.entiry.UserAccount;
-import br.com.cafebinario.register.rules.FindLastTenUsersRules;
+import br.com.cafebinario.register.rules.user.FindLastTenUsersRules;
 import br.com.cafebinario.repository.UserAccountRepository;
 
 @RunWith(SpringRunner.class)

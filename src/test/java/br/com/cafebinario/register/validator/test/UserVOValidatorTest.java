@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.cafebinario.main.Main;
-import br.com.cafebinario.register.vo.NewUserVO;
+import br.com.cafebinario.register.vo.user.NewUserVO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { Main.class })

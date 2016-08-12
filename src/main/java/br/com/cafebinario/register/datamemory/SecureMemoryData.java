@@ -7,8 +7,7 @@ import javax.crypto.SecretKey;
 import org.springframework.data.util.Pair;
 import org.springframework.util.Assert;
 
-import br.com.cafebinario.exception.ExpireTokenException;
-import br.com.cafebinario.register.vo.UserAuthenticationVO;
+import br.com.cafebinario.register.vo.user.UserAuthenticationVO;
 
 public final class SecureMemoryData implements Serializable{
 
@@ -18,8 +17,8 @@ public final class SecureMemoryData implements Serializable{
 	private final UserAuthenticationVO userAuthenticationVO;
 	private final Long createKeyTimestamp;
 	
-	public SecureMemoryData(Pair<String, SecretKey> pair, UserAuthenticationVO userAuthenticationVO,
-			Long createKeyTimestamp) {
+	public SecureMemoryData(final Pair<String, SecretKey> pair, final UserAuthenticationVO userAuthenticationVO,
+			final Long createKeyTimestamp) {
 		super();
 		this.pair = pair;
 		this.userAuthenticationVO = userAuthenticationVO;
@@ -49,7 +48,7 @@ public final class SecureMemoryData implements Serializable{
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

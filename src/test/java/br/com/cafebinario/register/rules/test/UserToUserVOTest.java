@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.cafebinario.entiry.UserAccount;
 import br.com.cafebinario.main.Main;
-import br.com.cafebinario.register.entiry.UserAccount;
-import br.com.cafebinario.register.rules.UserToUserVORules;
-import br.com.cafebinario.register.vo.NewUserVO;
+import br.com.cafebinario.register.rules.user.CreateSecurePasswordRules;
+import br.com.cafebinario.register.rules.user.UserToUserVORules;
+import br.com.cafebinario.register.vo.user.NewUserVO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { Main.class })
@@ -19,9 +20,16 @@ public class UserToUserVOTest {
 	@Autowired
 	private UserToUserVORules userToUserVORules;
 	
+	@Autowired
+	private CreateSecurePasswordRules createSecurePasswordRules;
+	
 	@Test
 	public void test() {
-		NewUserVO userVO = userToUserVORules.apply(new UserAccount(NewUserVO.createUserVOJUnitValidTest(), ""));
+		NewUserVO newUserVO = NewUserVO.createUserVOJUnitValidTest();
+		String secureKey = "123456";
+		String securePassword = createSecurePasswordRules.apply(newUserVO.getDomain(), newUserVO.getPassword());
+		
+		NewUserVO userVO = userToUserVORules.apply(new UserAccount(NewUserVO.createUserVOJUnitValidTest(), secureKey, securePassword));
 		Assert.assertEquals(userVO, NewUserVO.createUserVOJUnitValidTest());
 	}
 }
