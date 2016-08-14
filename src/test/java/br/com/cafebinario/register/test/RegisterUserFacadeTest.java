@@ -109,6 +109,7 @@ public class RegisterUserFacadeTest {
 	public void userHasExistTest() {
 		BDDMockito.doThrow(VerifyExistUserException.class).when(createUserRules).apply(userVO);
 		ResultVO existUserResultVO = registerFacade.newUser(userVO);
+		System.out.println(existUserResultVO.toString());
 		Assert.assertEquals(ResultVOBuilder.ERROR_USER_HAS_EXIST(), existUserResultVO);
 	}
 

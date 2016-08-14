@@ -59,7 +59,7 @@ public class RegisterUserControllerTest {
 	@Test
 	public void confirmSUCCESS() throws ConfirmUserException {
 		BDDMockito.doNothing().doThrow(new ConfirmUserException()).when(registerFacade).confirmUser(secureKey);
-		testRestTemplate.put("/register/confirm?secureKey=" + secureKey, null);
+		testRestTemplate.put("/user/confirm?secureKey=" + secureKey, null);
 	}
 
 	@Test
