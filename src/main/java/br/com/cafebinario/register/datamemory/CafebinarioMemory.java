@@ -1,58 +1,84 @@
 package br.com.cafebinario.register.datamemory;
 
 import java.io.ByteArrayInputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.NoSuchPaddingException;
 
-import org.apache.tomcat.jni.Time;
 import org.springframework.util.Assert;
 import org.springframework.util.Base64Utils;
 
 import br.com.cafebinario.register.vo.user.UserAuthenticationVO;
 
-public final class CafebinarioMemory {
+public final class CafebinarioMemory implements Closeable {
 
 	private final static class Singlegon {
-		private final static CafebinarioMemory CAFEBINARIO_MEMORY = new CafebinarioMemory();
-	}
-
-	private final class VerifierExpireTokens implements Runnable {
-
-		@Override
-		public void run() {
-			while (true) {
-				try {
-					if (!Singlegon.CAFEBINARIO_MEMORY.memory.isEmpty()
-							&& Singlegon.CAFEBINARIO_MEMORY.memory.entrySet().iterator().hasNext())
-						Singlegon.CAFEBINARIO_MEMORY.memory.entrySet().iterator().next().getValue().verify();
-				} catch (Exception e) {
-					Singlegon.CAFEBINARIO_MEMORY.memory.entrySet().iterator().remove();
-				}
-
-				Time.sleep(1 * 60 * 1000);
-			}
+		private final static CafebinarioMemory CAFEBINARIO_MEMORY(Map<String, SecureMemoryData> memory){
+			return new CafebinarioMemory(memory);
 		}
 	}
 
-	public static CafebinarioMemory getInstance() {
-		return Singlegon.CAFEBINARIO_MEMORY;
+	private final class VerifierExpireTokens implements Runnable, Closeable {
+
+		private volatile boolean running;
+		private Map<String, SecureMemoryData> memory;
+		
+		private VerifierExpireTokens(Map<String, SecureMemoryData> memory){
+			this.memory = memory;
+		}
+		
+		@Override
+		public void run() {
+			running = true;
+			while (running) {
+				try {
+					if (!memory.isEmpty()
+							&& memory.entrySet().iterator().hasNext())
+						memory.entrySet().iterator().next().getValue().verify();
+				} catch (Exception e) {
+					memory.entrySet().iterator().remove();
+				}
+
+				try {
+					TimeUnit.MINUTES.sleep(2);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		@Override
+		public void close() throws IOException {
+			this.running = false;
+		}
 	}
 
-	private CafebinarioMemory() {
-		new Thread(new VerifierExpireTokens()).start();
+	public static CafebinarioMemory getInstance(Map<String, SecureMemoryData> memory) {
+		return Singlegon.CAFEBINARIO_MEMORY(memory);
 	}
 
-	private final Map<String, SecureMemoryData> memory = Collections.synchronizedMap(new TreeMap<>());
+	private CafebinarioMemory(Map<String, SecureMemoryData> memory) {
+		this.memory = memory;
+		this.verifierExpireTokens = new VerifierExpireTokens(memory);
+		new Thread(new VerifierExpireTokens(memory)).start();
+	}
 
+	private final VerifierExpireTokens verifierExpireTokens;
+	private final Map<String, SecureMemoryData> memory;
+
+	@Override
+	public void close() throws IOException {
+		this.verifierExpireTokens.close();
+	}
+	
 	public int size() {
 		return memory.size();
 	}
@@ -69,14 +95,6 @@ public final class CafebinarioMemory {
 		final SecureMemoryData secureMemoryData = memory.get(key);
 
 		Assert.notNull(secureMemoryData);
-
-		/**
-		 * TODO SecureMemoryData ja esta em memoria e ja possui objeto com
-		 * timestamp para verificar se esta em tempo valido o codigo abaixo tem
-		 * apenas o objetivo de testar a chave. A questao aqui eh que a chave
-		 * sera sempre valida, senao nao estaria em memoria... avaliar se existe
-		 * algum motivo para esse teste. (que eh bem pouco performatico!)
-		 */
 		CipherInputStream cipherInputStream = null;
 		try {
 			final Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");

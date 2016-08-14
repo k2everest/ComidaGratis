@@ -5,14 +5,14 @@ import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.cafebinario.entiry.DomainAccount;
-import br.com.cafebinario.repository.AccountDomainRepository;
+import br.com.cafebinario.entity.DomainAccount;
+import br.com.cafebinario.repository.DomainAccountRepository;
 
 @Component
 public class PersistDomainRules implements Consumer<DomainAccount> {
 
 	@Autowired
-	private AccountDomainRepository domainAccountRepository;
+	private DomainAccountRepository domainAccountRepository;
 	
 	@Override
 	public void accept(final DomainAccount domainAccount) {

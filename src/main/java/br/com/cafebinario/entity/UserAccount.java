@@ -1,4 +1,4 @@
-package br.com.cafebinario.entiry;
+package br.com.cafebinario.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,10 +13,11 @@ import javax.persistence.ManyToOne;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 
+import br.com.cafebinario.cache.BeanCacheable;
 import br.com.cafebinario.register.vo.user.NewUserVO;
 
 @Entity
-public class UserAccount implements Serializable {
+public class UserAccount implements Serializable, BeanCacheable<UserAccount> {
 
 	private static final long serialVersionUID = -1611667244738168361L;
 
@@ -34,7 +35,7 @@ public class UserAccount implements Serializable {
 	@Column(length = 96, nullable = false)
 	private String password;
 
-	@Column(length = 256, nullable = false)
+	@Column(length = 1024, nullable = false)
 	private String secureKey;
 
 	@Column(nullable = false)

@@ -1,4 +1,4 @@
-package br.com.cafebinario.entiry;
+package br.com.cafebinario.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,10 +12,11 @@ import javax.persistence.OneToMany;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 
+import br.com.cafebinario.cache.BeanCacheable;
 import br.com.cafebinario.register.vo.domain.NewDomainVO;
 
 @Entity
-public class DomainAccount implements Serializable {
+public class DomainAccount implements Serializable, BeanCacheable<DomainAccount> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,6 +43,7 @@ public class DomainAccount implements Serializable {
 		this.setDomain(domainVO.getDomain());
 		this.setDescription(domainVO.getDescription());
 		this.setEmailOwner(domainVO.getEmailOwner());
+		this.setCreateDate(new Date(System.currentTimeMillis()));
 	}
 
 	public DomainAccount() {

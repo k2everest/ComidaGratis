@@ -9,8 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.cafebinario.entiry.DomainAccount;
-import br.com.cafebinario.entiry.UserAccount;
+import br.com.cafebinario.entity.DomainAccount;
+import br.com.cafebinario.entity.UserAccount;
 import br.com.cafebinario.main.Main;
 import br.com.cafebinario.register.rules.domain.PersistDomainRules;
 import br.com.cafebinario.register.rules.user.CreateSecurePasswordRules;

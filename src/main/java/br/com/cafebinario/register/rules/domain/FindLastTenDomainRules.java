@@ -8,15 +8,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import br.com.cafebinario.entiry.DomainAccount;
+import br.com.cafebinario.entity.DomainAccount;
 import br.com.cafebinario.register.vo.PageVO;
-import br.com.cafebinario.repository.AccountDomainRepository;
+import br.com.cafebinario.repository.DomainAccountRepository;
 
 @Component
 public class FindLastTenDomainRules implements Function<PageVO, List<DomainAccount>> {
 
 	@Autowired
-	private AccountDomainRepository accountDomainRepository;
+	private DomainAccountRepository accountDomainRepository;
 
 	public List<DomainAccount> apply(final PageVO pageVO) {
 		/**

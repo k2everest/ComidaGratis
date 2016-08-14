@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 import org.springframework.stereotype.Component;
 
-import br.com.cafebinario.entiry.UserAccount;
+import br.com.cafebinario.entity.UserAccount;
 import br.com.cafebinario.register.vo.user.NewUserVO;
 
 @Component

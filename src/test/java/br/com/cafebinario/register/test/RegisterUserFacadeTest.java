@@ -13,11 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.cafebinario.entiry.UserAccount;
+import br.com.cafebinario.entity.UserAccount;
 import br.com.cafebinario.exception.NotifyException;
 import br.com.cafebinario.exception.VerifyExistUserException;
 import br.com.cafebinario.main.Main;
-import br.com.cafebinario.register.UserAccountRegisterFacade;
+import br.com.cafebinario.register.facade.UserAccountRegisterFacade;
 import br.com.cafebinario.register.rules.user.ConfimUserRegisterRules;
 import br.com.cafebinario.register.rules.user.CreateRegisterUrlRules;
 import br.com.cafebinario.register.rules.user.CreateSecurePasswordRules;
@@ -58,7 +58,7 @@ public class RegisterUserFacadeTest {
 
 	@Autowired
 	private CreateRegisterUrlRules createRegisterUrl;
-	
+
 	@Autowired
 	private CreateSecurePasswordRules createSecurePasswordRules;
 
@@ -68,11 +68,11 @@ public class RegisterUserFacadeTest {
 
 	private List<NewUserVO> expectedUserVOList;
 	private List<UserAccount> expectedUserAccountList;
-	
+
 	private UserAccount expectedUserAccount;
-	
+
 	private String expectedTo;
-	
+
 	private String expectedUrl;
 
 	@Before
@@ -91,7 +91,7 @@ public class RegisterUserFacadeTest {
 		BDDMockito.doNothing().when(persistUserRules).accept(expectedUserAccount);
 		BDDMockito.given(confimUserRegisterRules.apply(secureKey)).willReturn(expectedUserAccount);
 		BDDMockito.given(findLastTenUsersRules.get()).willReturn(expectedUserAccountList);
-		
+
 		this.expectedTo = userVO.getEmail();
 		this.expectedUrl = createRegisterUrl.apply(secureKey);
 	}
@@ -100,7 +100,7 @@ public class RegisterUserFacadeTest {
 	public void newUserTest() {
 		BDDMockito.given(createUserRules.apply(userVO)).willReturn(expectedUserAccount);
 		BDDMockito.doNothing().when(sendSecureKeyRules).accept(expectedTo, expectedUrl);
-		
+
 		ResultVO resultVO = registerFacade.newUser(userVO);
 		Assert.assertEquals(ResultVOBuilder.SUCCESS(), resultVO);
 	}
@@ -111,13 +111,13 @@ public class RegisterUserFacadeTest {
 		ResultVO existUserResultVO = registerFacade.newUser(userVO);
 		Assert.assertEquals(ResultVOBuilder.ERROR_USER_HAS_EXIST(), existUserResultVO);
 	}
-	
+
 	@Test
-	public void sendSecureKeyTest(){
+	public void sendSecureKeyTest() {
 		BDDMockito.given(createUserRules.apply(userVO)).willReturn(expectedUserAccount);
 		BDDMockito.doThrow(NotifyException.class).when(sendSecureKeyRules).accept(expectedTo, expectedUrl);
 		ResultVO existUserResultVO = registerFacade.newUser(userVO);
-		Assert.assertEquals(ResultVOBuilder.SUCCESS(), existUserResultVO);
+		Assert.assertEquals(ResultVOBuilder.ERROR_SEND_SECURE_KEY(), existUserResultVO);
 	}
 
 	@Test

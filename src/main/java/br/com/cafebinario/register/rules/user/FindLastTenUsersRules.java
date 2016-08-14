@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import br.com.cafebinario.entiry.UserAccount;
+import br.com.cafebinario.entity.UserAccount;
 import br.com.cafebinario.repository.UserAccountRepository;
 
 @Component

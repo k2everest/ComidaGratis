@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.cafebinario.exception.ConfirmUserException;
-import br.com.cafebinario.register.UserAccountRegisterFacade;
+import br.com.cafebinario.register.facade.UserAccountRegisterFacade;
 import br.com.cafebinario.register.vo.result.user.AuthenticationResultVO;
 import br.com.cafebinario.register.vo.result.user.ResultVO;
 import br.com.cafebinario.register.vo.result.user.UserListResultVO;

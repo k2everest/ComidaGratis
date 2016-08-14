@@ -25,6 +25,16 @@ public class NewUserVO implements Serializable {
 		return userVO;
 	}
 	
+	public static NewUserVO createUserVOJUnitValidTest(String email, String nick, String password) {
+		final NewUserVO userVO = new NewUserVO();
+		userVO.setDomain("cafebinario");
+		userVO.setEmail(email);
+		userVO.setNick(nick);
+		userVO.setPassword(password);
+		userVO.setChanllerger(123456);
+		return userVO;
+	}
+	
 	public static NewUserVO createUserVOJUnitInvalidTest() {
 		final NewUserVO userVO = new NewUserVO();
 		userVO.setDomain(null);

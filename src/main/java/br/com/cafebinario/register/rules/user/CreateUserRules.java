@@ -1,12 +1,13 @@
 package br.com.cafebinario.register.rules.user;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import br.com.cafebinario.entiry.UserAccount;
+import br.com.cafebinario.entity.UserAccount;
 import br.com.cafebinario.exception.VerifyExistUserException;
 import br.com.cafebinario.register.vo.user.NewUserVO;
 
@@ -32,7 +33,10 @@ public class CreateUserRules implements Function<NewUserVO, UserAccount>{
 		verifySecureKey(secureKey);
 		final String securePassword = createSecurePasswordRules.apply(newUserVO.getDomain(), newUserVO.getPassword());
 		final UserAccount user = new UserAccount(newUserVO, secureKey, securePassword);
-		verifyExistUser.accept(user.getPassword(), user.getSecureKey());
+		
+		if(verifyExistUser.apply(user.getNick(), user.getSecureKey())){
+			throw new VerifyExistUserException();
+		}
 		
 		return user;
 	}

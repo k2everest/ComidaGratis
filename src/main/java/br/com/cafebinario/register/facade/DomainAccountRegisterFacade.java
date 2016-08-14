@@ -1,4 +1,4 @@
-package br.com.cafebinario.register;
+package br.com.cafebinario.register.facade;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.hazelcast.core.ITopic;
 
-import br.com.cafebinario.entiry.DomainAccount;
+import br.com.cafebinario.entity.DomainAccount;
 import br.com.cafebinario.exception.NotifyException;
 import br.com.cafebinario.exception.VerifyExistUserException;
 import br.com.cafebinario.notify.data.EventNotifyData;
+import br.com.cafebinario.register.listener.DomainAccountEventListener;
+import br.com.cafebinario.register.listener.EventNotifyDataEventListener;
 import br.com.cafebinario.register.rules.domain.CountDomainsRules;
 import br.com.cafebinario.register.rules.domain.CreateDomainRules;
 import br.com.cafebinario.register.rules.domain.DomainToDomainVORules;
@@ -47,12 +49,13 @@ public class DomainAccountRegisterFacade {
 	@Autowired
 	private ITopic<EventNotifyData> eventNotifyTopic;
 	
+	@Autowired
+	private DomainAccountEventListener domainAccountEventListener;
+	
+	@Autowired
+	private EventNotifyDataEventListener eventNotifyDataEventListener;
+	
 	public DomainListResultVO lisDomains(PageVO pageVO) {
-
-		Long total = null;
-		if (pageVO.getPageSize() == 1) {
-			total = countDomainsRules.get();
-		}
 
 		final List<DomainAccount> userList = findLastTenDomainRules.apply(pageVO);
 		final List<NewDomainVO> domainVOList = new ArrayList<>(userList.size());
@@ -62,13 +65,14 @@ public class DomainAccountRegisterFacade {
 			domainVOList.add(userVO);
 		});
 
-		return new DomainListResultVO(ResultVOBuilder.SUCCESS(), domainVOList, total);
+		return new DomainListResultVO(ResultVOBuilder.SUCCESS(), domainVOList, pageVO.getPageNumber() == 1 ? countDomainsRules.get() : null);
 	}
 
 	@Transactional
 	public ResultVO newDomain(final NewDomainVO domainVO) {
 		try {
 			final DomainAccount domain = createDomainRules.apply(domainVO);
+			persist(domain);
 			notify(domain);
 			return ResultVOBuilder.SUCCESS();
 		} catch (VerifyExistUserException e) {
@@ -78,12 +82,19 @@ public class DomainAccountRegisterFacade {
 		}
 	}
 
-	private void notify(final DomainAccount domain) {
+	private void persist(DomainAccount domain) {
+		domainAccountTopic.addMessageListener(domainAccountEventListener);
 		domainAccountTopic.publish(domain);
+	}
+
+	private void notify(final DomainAccount domain) {
+		
 		final EventNotifyData eventNotifyData = EventNotifyData.newRegisterDefaultInstance(domain.getEmailOwner(),
 				HTMLUtil.packingBody(String.format("Domain %s create!", domain.getDomain())));
 		eventNotifyData.setCreationDate(new Date(System.currentTimeMillis()));
 		eventNotifyData.setSubject("Congratulations!!!");
+		
+		eventNotifyTopic.addMessageListener(eventNotifyDataEventListener);
 		eventNotifyTopic.publish(eventNotifyData);
 	}
 }

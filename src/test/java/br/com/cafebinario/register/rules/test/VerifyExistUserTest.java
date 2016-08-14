@@ -1,12 +1,12 @@
 package br.com.cafebinario.register.rules.test;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.cafebinario.exception.VerifyExistUserException;
 import br.com.cafebinario.main.Main;
 import br.com.cafebinario.register.rules.user.VerifyExistUserRules;
 
@@ -19,16 +19,16 @@ public class VerifyExistUserTest {
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testSpaces() {
-		verifyExistUserRules.accept("             ", "                ");
+		verifyExistUserRules.apply("             ", "                ");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testNull() {
-		verifyExistUserRules.accept(null, null);
+		verifyExistUserRules.apply(null, null);
 	}
 	
-	@Test(expected=VerifyExistUserException.class)
+	@Test
 	public void testNickAndSecureKey() {
-		verifyExistUserRules.accept("-----", "-----");
+		Assert.assertFalse(verifyExistUserRules.apply("-----", "-----"));
 	}
 }

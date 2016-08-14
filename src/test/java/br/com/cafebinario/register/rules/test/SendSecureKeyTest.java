@@ -30,8 +30,6 @@ public class SendSecureKeyTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testThrow() {
-		EventNotifyData eventNotifyData = EventNotifyData.newRegisterDefaultInstance(null, null);
-		BDDMockito.mock(Sender.class).execute(eventNotifyData);
 		sendSecureKeyRules.accept(null, null);
 	}
 }

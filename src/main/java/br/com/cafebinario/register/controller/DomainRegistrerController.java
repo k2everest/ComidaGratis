@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.cafebinario.register.DomainAccountRegisterFacade;
+import br.com.cafebinario.register.facade.DomainAccountRegisterFacade;
 import br.com.cafebinario.register.vo.PageVO;
 import br.com.cafebinario.register.vo.domain.NewDomainVO;
 import br.com.cafebinario.register.vo.result.domain.DomainListResultVO;
@@ -26,10 +26,10 @@ public class DomainRegistrerController {
 
 	@RequestMapping(path = "/pageNumber/{pageNumber}/pageSize/{pageSize}", method = RequestMethod.GET, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public DomainListResultVO lisDomains(@PathVariable(value = "pageNumber") Integer pageNumber,
+	public DomainListResultVO lisDomains(@PathVariable(value = "pageNumber") final Integer pageNumber,
 			@PathVariable(value = "pageSize") Integer pageSize) {
 		final PageVO pageVO = new PageVO(pageNumber, pageSize);
-		DomainListResultVO domainListResultVO = domainAccountRegisterFacade.lisDomains(pageVO);
+		final DomainListResultVO domainListResultVO = domainAccountRegisterFacade.lisDomains(pageVO);
 		return domainListResultVO;
 	}
 

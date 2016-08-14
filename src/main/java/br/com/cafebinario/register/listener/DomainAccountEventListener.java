@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 
-import br.com.cafebinario.entiry.DomainAccount;
+import br.com.cafebinario.entity.DomainAccount;
 import br.com.cafebinario.register.rules.domain.PersistDomainRules;
 
 @Service
