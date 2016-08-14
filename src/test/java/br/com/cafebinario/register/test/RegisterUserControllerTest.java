@@ -70,7 +70,7 @@ public class RegisterUserControllerTest {
 				UserListResultVO.class);
 
 		Assert.assertEquals(HttpStatus.OK, resultVOLastTen.getStatusCode());
-		Assert.assertEquals(resultVOLastTen.getBody().getResult(), ResultVOBuilder.SUCCESS());
-		Assert.assertEquals(resultVOLastTen.getBody().getUserList(), userListResultVO.getUserList());
+		Assert.assertEquals(ResultVOBuilder.SUCCESS(), resultVOLastTen.getBody().getResult());
+		Assert.assertEquals(userListResultVO.getUserList(), resultVOLastTen.getBody().getUserList());
 	}
 }
