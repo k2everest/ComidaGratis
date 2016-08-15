@@ -94,8 +94,8 @@ public class UserAccountRegisterFacade {
 		sendSecureKeyRules.accept(user.getEmail(), url);
 	}
 
-	public void confirmUser(final String secureKey) throws ConfirmUserException {
-		final UserAccount user = confimUserRegisterRules.apply(secureKey);
+	public void confirmUser(final String nick, final String secureKey) throws ConfirmUserException {
+		final UserAccount user = confimUserRegisterRules.apply(nick, secureKey);
 		userAccountTopic.addMessageListener(userAccountEventListener);
 		userAccountTopic.publish(user);
 	}

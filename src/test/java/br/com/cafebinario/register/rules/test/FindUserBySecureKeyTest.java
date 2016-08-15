@@ -27,8 +27,8 @@ public class FindUserBySecureKeyTest {
 	@Test
 	public void test(){
 		final String secureKey = "123456";
-		BDDMockito.given(userRepository.findUserBySecureKey(secureKey)).willReturn(null);
-		UserAccount userAccount = findUserBySecureKeyRules.apply(secureKey);
+		BDDMockito.given(userRepository.findByNickOrSecureKey("nickBla", secureKey)).willReturn(null);
+		UserAccount userAccount = findUserBySecureKeyRules.apply("nickBla", secureKey);
 		Assert.assertNull(userAccount);
 	}
 	
@@ -36,8 +36,8 @@ public class FindUserBySecureKeyTest {
 	public void testThrow(){
 		final String secureKey = "123456";
 		UserAccount expectedUser = null;
-		BDDMockito.given(userRepository.findUserBySecureKey(secureKey)).willReturn(expectedUser);
-		UserAccount userAccount = findUserBySecureKeyRules.apply(secureKey);
+		BDDMockito.given(userRepository.findByNickOrSecureKey("nickBla", secureKey)).willReturn(expectedUser);
+		UserAccount userAccount = findUserBySecureKeyRules.apply("nickBla", secureKey);
 		Assert.assertEquals(expectedUser, userAccount);
 	}
 }

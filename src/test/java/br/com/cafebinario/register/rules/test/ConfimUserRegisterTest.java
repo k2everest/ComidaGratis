@@ -35,8 +35,8 @@ public class ConfimUserRegisterTest {
 		String secureKey = "123456";
 		String securePassword = createSecurePasswordRules.apply(newUserVO.getDomain(), newUserVO.getPassword());
 		UserAccount expectedUserAccount = new UserAccount(newUserVO, secureKey, securePassword);
-		BDDMockito.given(findUserBySecureKey.apply(secureKey)).willReturn(expectedUserAccount);
-		UserAccount userAccount = confimUserRegisterRules.apply(secureKey);
+		BDDMockito.given(findUserBySecureKey.apply(newUserVO.getNick(), secureKey)).willReturn(expectedUserAccount);
+		UserAccount userAccount = confimUserRegisterRules.apply(newUserVO.getNick(), secureKey);
 		Assert.assertEquals(expectedUserAccount, userAccount);
 	}
 }

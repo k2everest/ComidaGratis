@@ -9,10 +9,10 @@ import br.com.cafebinario.entity.UserAccount;
 @Repository
 public interface UserAccountRepository extends JpaRepository<UserAccount, String>{
 
-	@Query("select u from UserAccount u where u.secureKey = ?1")
-	UserAccount findUserBySecureKey(final String secureKey);
+	@Query("select u from UserAccount u where u.nick = ?1 and u.secureKey = ?2")
+	UserAccount findUserByNickAndSecureKey(final String nick, final String secureKey);
 
-	@Query("select u from UserAccount u where u.nick = ?1 or u.secureKey = ?2")
+	@Query("select u from UserAccount u where u.nick = ?1 or u.secureKey = ?2 and u.alterDate is not null")
 	UserAccount findByNickOrSecureKey(final String nick, final String secureKey);
 
 	@Query("select u from UserAccount u where u.email = ?1 or u.nick = ?2")

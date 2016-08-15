@@ -89,7 +89,7 @@ public class RegisterUserFacadeTest {
 		this.expectedUserVOList.add(userVO);
 
 		BDDMockito.doNothing().when(persistUserRules).accept(expectedUserAccount);
-		BDDMockito.given(confimUserRegisterRules.apply(secureKey)).willReturn(expectedUserAccount);
+		BDDMockito.given(confimUserRegisterRules.apply(userVO.getNick(), secureKey)).willReturn(expectedUserAccount);
 		BDDMockito.given(findLastTenUsersRules.get()).willReturn(expectedUserAccountList);
 
 		this.expectedTo = userVO.getEmail();
@@ -123,7 +123,7 @@ public class RegisterUserFacadeTest {
 
 	@Test
 	public void confirmUserTest() {
-		registerFacade.confirmUser(secureKey);
+		registerFacade.confirmUser(userVO.getNick(), secureKey);
 		Assert.assertTrue(true);
 	}
 

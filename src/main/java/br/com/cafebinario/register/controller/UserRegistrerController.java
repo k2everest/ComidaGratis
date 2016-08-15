@@ -42,9 +42,9 @@ public class UserRegistrerController {
 	}
 
 	@RequestMapping(path = "/confirm", method = RequestMethod.PUT)
-	public void confirmRegister(@RequestParam(name = "secureKey", required = true) final String secureKey)
-			throws ConfirmUserException {
-		userAccountRegisterFacade.confirmUser(secureKey);
+	public void confirmRegister(@RequestParam(name = "nick", required = true) final String nick,
+			@RequestParam(name = "secureKey", required = true) final String secureKey) throws ConfirmUserException {
+		userAccountRegisterFacade.confirmUser(nick, secureKey);
 	}
 
 	@RequestMapping(path = "/authentication", method = RequestMethod.POST, consumes = {
@@ -54,12 +54,12 @@ public class UserRegistrerController {
 		final AuthenticationResultVO authenticationResultVO = userAccountRegisterFacade.auth(userVO);
 		return ResponseEntity.ok(authenticationResultVO);
 	}
-	
+
 	@RequestMapping(path = "/user/{token}", method = RequestMethod.GET, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public @ResponseBody UserAuthenticationVO getUserByToken(
-			@PathVariable(value="token") final String token) {
-		final UserAuthenticationVO userAuthenticationVO = userAccountRegisterFacade.getUserAuthenticationVOByToken(token);
+	public @ResponseBody UserAuthenticationVO getUserByToken(@PathVariable(value = "token") final String token) {
+		final UserAuthenticationVO userAuthenticationVO = userAccountRegisterFacade
+				.getUserAuthenticationVOByToken(token);
 		return userAuthenticationVO;
 	}
 }
