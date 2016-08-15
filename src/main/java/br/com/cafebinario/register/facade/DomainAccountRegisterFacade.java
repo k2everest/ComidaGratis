@@ -23,9 +23,9 @@ import br.com.cafebinario.register.rules.domain.DomainToDomainVORules;
 import br.com.cafebinario.register.rules.domain.FindLastTenDomainRules;
 import br.com.cafebinario.register.vo.PageVO;
 import br.com.cafebinario.register.vo.domain.NewDomainVO;
+import br.com.cafebinario.register.vo.result.ResultVO;
 import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
 import br.com.cafebinario.register.vo.result.domain.DomainListResultVO;
-import br.com.cafebinario.register.vo.result.user.ResultVO;
 import br.com.cafebinario.util.HTMLUtil;
 
 @Service

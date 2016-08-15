@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import br.com.cafebinario.register.vo.domain.NewDomainVO;
-import br.com.cafebinario.register.vo.result.user.ResultVO;
+import br.com.cafebinario.register.vo.result.ResultVO;
 
 public class DomainListResultVO implements Serializable{
 

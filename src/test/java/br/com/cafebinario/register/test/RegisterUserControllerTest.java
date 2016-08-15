@@ -19,8 +19,8 @@ import br.com.cafebinario.exception.ConfirmUserException;
 import br.com.cafebinario.main.Main;
 import br.com.cafebinario.register.config.JUnitConfig;
 import br.com.cafebinario.register.facade.UserAccountRegisterFacade;
+import br.com.cafebinario.register.vo.result.ResultVO;
 import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
-import br.com.cafebinario.register.vo.result.user.ResultVO;
 import br.com.cafebinario.register.vo.result.user.UserListResultVO;
 import br.com.cafebinario.register.vo.user.NewUserVO;
 

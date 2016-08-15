@@ -2,6 +2,7 @@ package br.com.cafebinario.register.vo.result.user;
 
 import java.io.Serializable;
 
+import br.com.cafebinario.register.vo.result.ResultVO;
 import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
 
 public class AuthenticationResultVO implements Serializable {

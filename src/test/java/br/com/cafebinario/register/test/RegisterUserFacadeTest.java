@@ -26,8 +26,8 @@ import br.com.cafebinario.register.rules.user.FindLastTenUsersRules;
 import br.com.cafebinario.register.rules.user.PersistUserRules;
 import br.com.cafebinario.register.rules.user.SendSecureKeyRules;
 import br.com.cafebinario.register.rules.user.UserToUserVORules;
+import br.com.cafebinario.register.vo.result.ResultVO;
 import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
-import br.com.cafebinario.register.vo.result.user.ResultVO;
 import br.com.cafebinario.register.vo.result.user.UserListResultVO;
 import br.com.cafebinario.register.vo.user.NewUserVO;
 

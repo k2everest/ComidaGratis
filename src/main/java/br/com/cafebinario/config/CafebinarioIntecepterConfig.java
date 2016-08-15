@@ -21,7 +21,7 @@ public class CafebinarioIntecepterConfig extends WebMvcConfigurerAdapter {
 	@Value("${pathPatterns:/**}")
 	private String pathPatterns;
 
-	@Value("${excludePathPatterns:/domain/**,/user/**}")
+	@Value("${excludePathPatterns:/domain/**,/user/**,/api/**}")
 	private String excludePathPatterns = "";
 
 	@Override

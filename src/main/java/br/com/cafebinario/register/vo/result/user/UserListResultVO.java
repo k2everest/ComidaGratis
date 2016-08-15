@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.cafebinario.register.vo.result.ResultVO;
 import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
 import br.com.cafebinario.register.vo.user.NewUserVO;
 
