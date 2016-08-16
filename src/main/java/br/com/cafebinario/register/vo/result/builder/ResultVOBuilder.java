@@ -24,4 +24,8 @@ public class ResultVOBuilder {
 		return new ResultVO(4, "UNAUTHORIZED");
 	}
 
+	public static ResultVO BLANCK() {
+		return new ResultVO(0, "");
+	}
+
 }

@@ -12,6 +12,15 @@ public class UserAuthenticationVO implements Serializable {
 
 	private static final long serialVersionUID = 4529559441140157881L;
 	
+	public static UserAuthenticationVO createUserBlanck() {
+		UserAuthenticationVO userAuthenticationVO = new UserAuthenticationVO();
+		userAuthenticationVO.setDomain("");
+		userAuthenticationVO.setEmail("");
+		userAuthenticationVO.setNick("");
+		userAuthenticationVO.setPassword("");
+		return userAuthenticationVO;
+	}
+	
 	public static UserAuthenticationVO createUserVOJUnitValidTest(final String securePassword) {
 		final NewUserVO newUserVO = NewUserVO.createUserVOJUnitInvalidTest();
 		final UserAuthenticationVO userAuthenticationVO = new UserAuthenticationVO();

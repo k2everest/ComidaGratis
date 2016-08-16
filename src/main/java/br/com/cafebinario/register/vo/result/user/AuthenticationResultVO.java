@@ -8,6 +8,11 @@ import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
 public class AuthenticationResultVO implements Serializable {
 
 	private static final long serialVersionUID = 2229600077307767651L;
+	
+	public static AuthenticationResultVO createUserBlanck() {
+		AuthenticationResultVO authenticationResultVO = new AuthenticationResultVO("", ResultVOBuilder.BLANCK());
+		return authenticationResultVO;
+	}
 
 	private final ResultVO result;
 	private final String token;
@@ -22,6 +27,11 @@ public class AuthenticationResultVO implements Serializable {
 		this.token = null;
 	}
 
+	public AuthenticationResultVO(final String token, ResultVO result) {
+		this.token = token;
+		this.result = result;
+	}
+	
 	public ResultVO getResult() {
 		return result;
 	}

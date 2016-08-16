@@ -11,6 +11,14 @@ import org.hibernate.validator.constraints.NotBlank;
 public class NewDomainVO implements Serializable {
 
 	private static final long serialVersionUID = 7856300122404507564L;
+	
+	public static NewDomainVO createUserBlanck() {
+		NewDomainVO newDomainVO = new NewDomainVO();
+		newDomainVO.setDescription("");
+		newDomainVO.setDomain("");
+		newDomainVO.setEmailOwner("");
+		return newDomainVO;
+	}
 
 	@NotBlank(message = "invalid blank value")
 	@Pattern(regexp = "[a-zA-Z]+", message = "invalid caracter, expected [a-zA-Z]+")

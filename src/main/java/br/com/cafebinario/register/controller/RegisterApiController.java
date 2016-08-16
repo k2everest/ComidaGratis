@@ -9,39 +9,67 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.cafebinario.register.vo.domain.NewDomainVO;
+import br.com.cafebinario.register.vo.result.ResultVO;
 import br.com.cafebinario.register.vo.result.api.FlowLinkVO;
 import br.com.cafebinario.register.vo.result.api.LinkVO;
+import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
+import br.com.cafebinario.register.vo.result.domain.DomainListResultVO;
+import br.com.cafebinario.register.vo.result.user.AuthenticationResultVO;
+import br.com.cafebinario.register.vo.result.user.UserListResultVO;
+import br.com.cafebinario.register.vo.user.NewUserVO;
+import br.com.cafebinario.register.vo.user.UserAuthenticationVO;
 
 @RestController
 @RequestMapping("/api")
 public class RegisterApiController {
 
-	@RequestMapping(path = "", method = RequestMethod.GET, produces = {
-			MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(path = "", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public @ResponseBody FlowLinkVO showRegisterApi() {
+
+		final ResultVO resultResponse = ResultVOBuilder.BLANCK();
+		final NewDomainVO newDomainRequest = NewDomainVO.createUserBlanck();
+		final NewUserVO newUserRequest = NewUserVO.createUserBlanck();
+		final UserAuthenticationVO userAuthenticationRequest = UserAuthenticationVO.createUserBlanck();
+		final AuthenticationResultVO authenticationResultResponse = AuthenticationResultVO.createUserBlanck();
+		final UserListResultVO userListResultResponse = UserListResultVO.createUserBlanck();
+		final DomainListResultVO domainListResultResponse = DomainListResultVO.createUserBlanck();
+		
 		final List<LinkVO> links = new ArrayList<>();
 		final List<LinkVO> nextUserNewLinks = new ArrayList<>();
 		final List<LinkVO> optionUserLinks = new ArrayList<>();
-		List<LinkVO> chooses = new ArrayList<>();
+		final List<LinkVO> chooses = new ArrayList<>();
 		
-		links.add(new LinkVO(RequestMethod.GET.name(), MediaType.APPLICATION_JSON_VALUE, "http://cafebinario.com.br/domain?pageNumber={pageNumber}&pageSize={pageSize}", null));
-		links.add(new LinkVO(RequestMethod.POST.name(), MediaType.APPLICATION_JSON_VALUE, "http://cafebinario.com.br/domain/new", null));
+
+		links.add(new LinkVO(RequestMethod.GET.name(), MediaType.APPLICATION_JSON_VALUE,
+				"http://cafebinario.com.br/domain?pageNumber={pageNumber}&pageSize={pageSize}", null, null, domainListResultResponse));
+
+		links.add(new LinkVO(RequestMethod.POST.name(), MediaType.APPLICATION_JSON_VALUE,
+				"http://cafebinario.com.br/domain/new", null, newDomainRequest, resultResponse));
+
+		links.add(new LinkVO(RequestMethod.POST.name(), MediaType.APPLICATION_JSON_VALUE,
+				"http://cafebinario.com.br/user/lastTen", null, null, userListResultResponse));
+
+		nextUserNewLinks.add(new LinkVO(RequestMethod.PUT.name(), MediaType.APPLICATION_JSON_VALUE,
+				"http://cafebinario.com.br/user/confirm?nick={nick}&secureKey={secureKey}", null, null, null));
+
+		links.add(new LinkVO(RequestMethod.POST.name(), MediaType.APPLICATION_JSON_VALUE,
+				"http://cafebinario.com.br/user/new", nextUserNewLinks, newUserRequest, resultResponse));
+
+		chooses.add(new LinkVO(RequestMethod.POST.name(), MediaType.APPLICATION_JSON_VALUE,
+				"http://cafebinario.com.br/{domain}/{nick}/donate", null, null, null));
+		chooses.add(new LinkVO(RequestMethod.GET.name(), MediaType.APPLICATION_JSON_VALUE,
+				"http://cafebinario.com.br/{domain}/{nick}/benefits", null, null, null));
+
+		optionUserLinks.add(new LinkVO(RequestMethod.GET.name(), MediaType.APPLICATION_JSON_VALUE,
+				"http://cafebinario.com.br/{domain}/{nick}", chooses, null, null));
+
+		links.add(new LinkVO(RequestMethod.POST.name(), MediaType.APPLICATION_JSON_VALUE,
+				"http://cafebinario.com.br/user/authentication", optionUserLinks, userAuthenticationRequest, authenticationResultResponse));
 		
-		links.add(new LinkVO(RequestMethod.POST.name(), MediaType.APPLICATION_JSON_VALUE, "http://cafebinario.com.br/user/lastTen", null));
-		
-		nextUserNewLinks.add(new LinkVO(RequestMethod.PUT.name(), MediaType.APPLICATION_JSON_VALUE, "http://cafebinario.com.br/user/confirm?nick={nick}&secureKey={secureKey}", null));
-		links.add(new LinkVO(RequestMethod.POST.name(), MediaType.APPLICATION_JSON_VALUE, "http://cafebinario.com.br/user/new", nextUserNewLinks));
-		
-		chooses.add(new LinkVO(RequestMethod.POST.name(), MediaType.APPLICATION_JSON_VALUE, "http://cafebinario.com.br/{domain}/{nick}/donate", null));
-		chooses.add(new LinkVO(RequestMethod.GET.name(), MediaType.APPLICATION_JSON_VALUE, "http://cafebinario.com.br/{domain}/{nick}/benefits", null));
-		
-		
-		optionUserLinks.add(new LinkVO(RequestMethod.GET.name(), MediaType.APPLICATION_JSON_VALUE, "http://cafebinario.com.br/{domain}/{nick}", chooses));
-		
-		links.add(new LinkVO(RequestMethod.POST.name(), MediaType.APPLICATION_JSON_VALUE, "http://cafebinario.com.br/user/authentication", optionUserLinks));
-		links.add(new LinkVO(RequestMethod.GET.name(), MediaType.APPLICATION_JSON_VALUE, "http://cafebinario.com.br/user/{token}", null));
-		
-		
+		links.add(new LinkVO(RequestMethod.GET.name(), MediaType.APPLICATION_JSON_VALUE,
+				"http://cafebinario.com.br/user/{token}", null, null, userAuthenticationRequest));
+
 		return new FlowLinkVO(links);
 	}
 }

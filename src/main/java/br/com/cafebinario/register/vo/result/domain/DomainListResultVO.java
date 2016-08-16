@@ -1,23 +1,25 @@
 package br.com.cafebinario.register.vo.result.domain;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import br.com.cafebinario.register.vo.domain.NewDomainVO;
 import br.com.cafebinario.register.vo.result.ResultVO;
+import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
 
-public class DomainListResultVO implements Serializable{
+public class DomainListResultVO implements Serializable {
 
 	private static final long serialVersionUID = 8629117189536073032L;
 
 	private final ResultVO result;
-	private final List<NewDomainVO> userList;
+	private final List<NewDomainVO> domainList;
 	private final Long registerCount;
 
-	public DomainListResultVO(ResultVO result, List<NewDomainVO> userList, Long registerCount) {
+	public DomainListResultVO(ResultVO result, List<NewDomainVO> domainList, Long registerCount) {
 		super();
 		this.result = result;
-		this.userList = userList;
+		this.domainList = domainList;
 		this.registerCount = registerCount;
 	}
 
@@ -25,10 +27,10 @@ public class DomainListResultVO implements Serializable{
 		return result;
 	}
 
-	public List<NewDomainVO> getUserList() {
-		return userList;
+	public List<NewDomainVO> getDomainList() {
+		return domainList;
 	}
-	
+
 	public Long getRegisterCount() {
 		return registerCount;
 	}
@@ -38,7 +40,7 @@ public class DomainListResultVO implements Serializable{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
-		result = prime * result + ((userList == null) ? 0 : userList.hashCode());
+		result = prime * result + ((domainList == null) ? 0 : domainList.hashCode());
 		return result;
 	}
 
@@ -56,16 +58,20 @@ public class DomainListResultVO implements Serializable{
 				return false;
 		} else if (!result.equals(other.result))
 			return false;
-		if (userList == null) {
-			if (other.userList != null)
+		if (domainList == null) {
+			if (other.domainList != null)
 				return false;
-		} else if (!userList.equals(other.userList))
+		} else if (!domainList.equals(other.domainList))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "DomainListResultVO [result=" + result + ", userList=" + userList + "]";
+		return "DomainListResultVO [result=" + result + ", domainList=" + domainList + "]";
+	}
+
+	public static DomainListResultVO createUserBlanck() {
+		return new DomainListResultVO(ResultVOBuilder.BLANCK(), Arrays.asList(NewDomainVO.createUserBlanck()), 0L);
 	}
 }

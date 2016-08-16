@@ -15,6 +15,16 @@ public class NewUserVO implements Serializable {
 
 	private static final long serialVersionUID = 7287308776815133697L;
 
+	public static NewUserVO createUserBlanck() {
+		final NewUserVO userVO = new NewUserVO();
+		userVO.setDomain("");
+		userVO.setEmail("");
+		userVO.setNick("");
+		userVO.setPassword("");
+		userVO.setChanllerger(0);
+		return userVO;
+	}
+	
 	public static NewUserVO createUserVOJUnitValidTest() {
 		final NewUserVO userVO = new NewUserVO();
 		userVO.setDomain("cafebinario");
