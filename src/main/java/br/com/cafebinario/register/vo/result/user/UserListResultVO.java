@@ -20,7 +20,7 @@ public class UserListResultVO implements Serializable {
 	}
 
 	public static UserListResultVO createUserListResultVOJUnitTest() {
-		final ResultVO resultVO = ResultVOBuilder.SUCCESS();
+		final ResultVO resultVO = ResultVOBuilder.SUCCESS(null);
 		final List<NewUserVO> userListVO = new ArrayList<>();
 
 		userListVO.add(NewUserVO.createUserVOJUnitValidTest());

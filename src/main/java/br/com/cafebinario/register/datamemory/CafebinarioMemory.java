@@ -21,7 +21,7 @@ import br.com.cafebinario.register.vo.user.UserAuthenticationVO;
 public final class CafebinarioMemory implements Closeable {
 
 	private final static class Singlegon {
-		private final static CafebinarioMemory CAFEBINARIO_MEMORY(Map<String, SecureMemoryData> memory){
+		private final static CafebinarioMemory CAFEBINARIO_MEMORY(Map<String, SecureMemoryData> memory) {
 			return new CafebinarioMemory(memory);
 		}
 	}
@@ -30,18 +30,17 @@ public final class CafebinarioMemory implements Closeable {
 
 		private volatile boolean running;
 		private Map<String, SecureMemoryData> memory;
-		
-		private VerifierExpireTokens(Map<String, SecureMemoryData> memory){
+
+		private VerifierExpireTokens(Map<String, SecureMemoryData> memory) {
 			this.memory = memory;
 		}
-		
+
 		@Override
 		public void run() {
 			running = true;
 			while (running) {
 				try {
-					if (!memory.isEmpty()
-							&& memory.entrySet().iterator().hasNext())
+					if (!memory.isEmpty() && memory.entrySet().iterator().hasNext())
 						memory.entrySet().iterator().next().getValue().verify();
 				} catch (Exception e) {
 					memory.entrySet().iterator().remove();
@@ -78,7 +77,7 @@ public final class CafebinarioMemory implements Closeable {
 	public void close() throws IOException {
 		this.verifierExpireTokens.close();
 	}
-	
+
 	public int size() {
 		return memory.size();
 	}
@@ -91,7 +90,7 @@ public final class CafebinarioMemory implements Closeable {
 		return memory.containsKey(key);
 	}
 
-	public UserAuthenticationVO get(final String key) {
+	public UserAuthenticationVO get(final String nick, final String key) {
 		final SecureMemoryData secureMemoryData = memory.get(key);
 
 		Assert.notNull(secureMemoryData);
@@ -120,7 +119,8 @@ public final class CafebinarioMemory implements Closeable {
 			userAuthenticationVO.setPassword(pipeDelimiterObjectString[i++]);
 
 			secureMemoryData.verify();
-			Assert.isTrue(userAuthenticationVO.equals(secureMemoryData.getUserAuthenticationVO()));
+			Assert.isTrue(Boolean.logicalAnd(userAuthenticationVO.equals(secureMemoryData.getUserAuthenticationVO()),
+					nick.equals(userAuthenticationVO.getNick())));
 
 			return secureMemoryData.getUserAuthenticationVO();
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IOException e) {

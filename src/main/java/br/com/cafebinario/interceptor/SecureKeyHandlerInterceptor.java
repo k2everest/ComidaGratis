@@ -22,12 +22,16 @@ public class SecureKeyHandlerInterceptor extends HandlerInterceptorAdapter{
 		final String secureKey = request.getParameter("secureKey");
 		final String nick = request.getParameter("nick");
 		
-		if(Boolean.logicalAnd(secureKey == null, nick == null)){
+		if(Boolean.logicalOr(secureKey == null, nick == null)){
 			return false;
 		}
 
-		final UserAuthenticationVO userAuthenticationVO = cafebinarioMemory.get(secureKey);
-		final boolean isSecure = nick.equals(userAuthenticationVO.getNick());
-		return isSecure;
+		final UserAuthenticationVO userAuthenticationVO = cafebinarioMemory.get(nick, secureKey);
+		
+		if(userAuthenticationVO == null){
+			return false;
+		}
+		
+		return true;
 	}
 }

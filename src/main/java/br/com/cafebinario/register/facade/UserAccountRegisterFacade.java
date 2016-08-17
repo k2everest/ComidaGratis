@@ -7,6 +7,7 @@ import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import com.hazelcast.core.ITopic;
 
@@ -75,17 +76,11 @@ public class UserAccountRegisterFacade {
 	@Autowired
 	private CafebinarioMemory cafebinarioMemory;
 	
-	public ResultVO newUser(final NewUserVO userVO) {
-		try {
-			final UserAccount user = createUserRules.apply(userVO);
-			final String url = createRegisterUrlRules.apply(user.getSecureKey());
-			notify(user, url);
-			return ResultVOBuilder.SUCCESS();
-		} catch (VerifyExistUserException e) {
-			return ResultVOBuilder.ERROR_USER_HAS_EXIST();
-		} catch (NotifyException e) {
-			return ResultVOBuilder.ERROR_SEND_SECURE_KEY();
-		}
+	public void newUser(final NewUserVO userVO) {
+		
+		final UserAccount user = createUserRules.apply(userVO);
+		final String url = createRegisterUrlRules.apply(user.getSecureKey());
+		notify(user, url);
 	}
 
 	private void notify(final UserAccount user, String url) {
@@ -100,7 +95,7 @@ public class UserAccountRegisterFacade {
 		userAccountTopic.publish(user);
 	}
 
-	public UserListResultVO lastTen() {
+	public List<NewUserVO> lastTen() {
 		final List<UserAccount> userList = findLastTenUsersRules.get();
 		final List<NewUserVO> userVOList = new ArrayList<>(userList.size());
 
@@ -109,23 +104,21 @@ public class UserAccountRegisterFacade {
 			userVOList.add(userVO);
 		});
 
-		return new UserListResultVO(ResultVOBuilder.SUCCESS(), userVOList);
+		return userVOList;
 	}
 
-	public AuthenticationResultVO auth(final UserAuthenticationVO userAuthenticationVO) {
-		try {
-			final String decriptyUserPassword = decriptyDataRules.apply(cafeBinarioSecretKey.getFormat(), userAuthenticationVO.getPassword());
-			userAuthenticationRules.accept(userAuthenticationVO, decriptyUserPassword);
-			final SecureMemoryData secureMemoryData = createAuthenticationTokenRules.apply(userAuthenticationVO);
-			
-			cafebinarioMemory.put(secureMemoryData);
-			return new AuthenticationResultVO(secureMemoryData.getPair().getFirst());
-		} catch (RuntimeException e) {
-			return new AuthenticationResultVO();
-		}
+	public String auth(final UserAuthenticationVO userAuthenticationVO) {
+		final String decriptyUserPassword = decriptyDataRules.apply(cafeBinarioSecretKey.getFormat(), userAuthenticationVO.getPassword());
+		userAuthenticationRules.accept(userAuthenticationVO, decriptyUserPassword);
+		final SecureMemoryData secureMemoryData = createAuthenticationTokenRules.apply(userAuthenticationVO);
+		
+		cafebinarioMemory.put(secureMemoryData);
+		return secureMemoryData.getPair().getFirst();
 	}
 
-	public UserAuthenticationVO getUserAuthenticationVOByToken(final String token) {
-		return cafebinarioMemory.get(token);
+	public UserAuthenticationVO getUserAuthenticationVOByToken(final String nick, final String token) {
+		Assert.hasText(nick);
+		Assert.hasLength(token);
+		return cafebinarioMemory.get(nick, token);
 	}
 }

@@ -16,7 +16,7 @@ public class DomainListResultVO implements Serializable {
 	private final List<NewDomainVO> domainList;
 	private final Long registerCount;
 
-	public DomainListResultVO(ResultVO result, List<NewDomainVO> domainList, Long registerCount) {
+	public DomainListResultVO(final ResultVO result, final List<NewDomainVO> domainList, final Long registerCount) {
 		super();
 		this.result = result;
 		this.domainList = domainList;

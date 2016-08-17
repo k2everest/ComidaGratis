@@ -26,9 +26,6 @@ import br.com.cafebinario.register.rules.user.FindLastTenUsersRules;
 import br.com.cafebinario.register.rules.user.PersistUserRules;
 import br.com.cafebinario.register.rules.user.SendSecureKeyRules;
 import br.com.cafebinario.register.rules.user.UserToUserVORules;
-import br.com.cafebinario.register.vo.result.ResultVO;
-import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
-import br.com.cafebinario.register.vo.result.user.UserListResultVO;
 import br.com.cafebinario.register.vo.user.NewUserVO;
 
 @RunWith(SpringRunner.class)
@@ -77,9 +74,9 @@ public class RegisterUserFacadeTest {
 
 	@Before
 	public void setup() {
-		NewUserVO newUserVO = NewUserVO.createUserVOJUnitValidTest();
-		String secureKey = "123456";
-		String securePassword = createSecurePasswordRules.apply(newUserVO.getDomain(), newUserVO.getPassword());
+		final NewUserVO newUserVO = NewUserVO.createUserVOJUnitValidTest();
+		final String secureKey = "123456";
+		final String securePassword = createSecurePasswordRules.apply(newUserVO.getDomain(), newUserVO.getPassword());
 		this.expectedUserAccount = new UserAccount(NewUserVO.createUserVOJUnitValidTest(), secureKey, securePassword);
 
 		this.expectedUserAccountList = new ArrayList<>();
@@ -101,24 +98,20 @@ public class RegisterUserFacadeTest {
 		BDDMockito.given(createUserRules.apply(userVO)).willReturn(expectedUserAccount);
 		BDDMockito.doNothing().when(sendSecureKeyRules).accept(expectedTo, expectedUrl);
 
-		ResultVO resultVO = registerFacade.newUser(userVO);
-		Assert.assertEquals(ResultVOBuilder.SUCCESS(), resultVO);
+		registerFacade.newUser(userVO);
 	}
 
-	@Test
+	@Test(expected=VerifyExistUserException.class)
 	public void userHasExistTest() {
 		BDDMockito.doThrow(VerifyExistUserException.class).when(createUserRules).apply(userVO);
-		ResultVO existUserResultVO = registerFacade.newUser(userVO);
-		System.out.println(existUserResultVO.toString());
-		Assert.assertEquals(ResultVOBuilder.ERROR_USER_HAS_EXIST(), existUserResultVO);
+		registerFacade.newUser(userVO);
 	}
 
-	@Test
+	@Test(expected=NotifyException.class)
 	public void sendSecureKeyTest() {
 		BDDMockito.given(createUserRules.apply(userVO)).willReturn(expectedUserAccount);
 		BDDMockito.doThrow(NotifyException.class).when(sendSecureKeyRules).accept(expectedTo, expectedUrl);
-		ResultVO existUserResultVO = registerFacade.newUser(userVO);
-		Assert.assertEquals(ResultVOBuilder.ERROR_SEND_SECURE_KEY(), existUserResultVO);
+		registerFacade.newUser(userVO);
 	}
 
 	@Test
@@ -129,8 +122,8 @@ public class RegisterUserFacadeTest {
 
 	@Test
 	public void lastTenTest() {
-		UserListResultVO userListResultVO = registerFacade.lastTen();
-		Assert.assertEquals(ResultVOBuilder.SUCCESS(), userListResultVO.getResult());
-		Assert.assertEquals(expectedUserVOList, userListResultVO.getUserList());
+		BDDMockito.given(findLastTenUsersRules.get()).willReturn(expectedUserAccountList);
+		final List<NewUserVO> newUserListVO = registerFacade.lastTen();
+		Assert.assertEquals(expectedUserVOList, newUserListVO);
 	}
 }

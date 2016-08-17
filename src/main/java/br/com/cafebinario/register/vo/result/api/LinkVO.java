@@ -7,6 +7,7 @@ public class LinkVO implements Serializable {
 
 	private static final long serialVersionUID = 8233594329230351282L;
 
+	private final String rel;
 	private final String method;
 	private final String contentType;
 	private final String url;
@@ -14,14 +15,20 @@ public class LinkVO implements Serializable {
 	private final Object objectRequestExample;
 	private final Object objectResponseExample;
 
-	public LinkVO(final String method, final String contentType, final String url, final List<LinkVO> links, final Object objectRequestExample, final Object objectResponseExample) {
+	public LinkVO(final String rel, final String method, final String contentType, final String url,
+			final List<LinkVO> links, final Object objectRequestExample, final Object objectResponseExample) {
 		super();
+		this.rel = rel;
 		this.method = method;
 		this.contentType = contentType;
 		this.url = url;
 		this.links = links;
 		this.objectRequestExample = objectRequestExample;
 		this.objectResponseExample = objectResponseExample;
+	}
+
+	public String getRel() {
+		return rel;
 	}
 
 	public String getMethod() {
@@ -35,11 +42,11 @@ public class LinkVO implements Serializable {
 	public String getUrl() {
 		return url;
 	}
-	
+
 	public List<LinkVO> getLinks() {
 		return links;
 	}
-	
+
 	public Object getObjectRequestExample() {
 		return objectRequestExample;
 	}
@@ -57,6 +64,7 @@ public class LinkVO implements Serializable {
 		result = prime * result + ((method == null) ? 0 : method.hashCode());
 		result = prime * result + ((objectRequestExample == null) ? 0 : objectRequestExample.hashCode());
 		result = prime * result + ((objectResponseExample == null) ? 0 : objectResponseExample.hashCode());
+		result = prime * result + ((rel == null) ? 0 : rel.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
 	}
@@ -95,6 +103,11 @@ public class LinkVO implements Serializable {
 				return false;
 		} else if (!objectResponseExample.equals(other.objectResponseExample))
 			return false;
+		if (rel == null) {
+			if (other.rel != null)
+				return false;
+		} else if (!rel.equals(other.rel))
+			return false;
 		if (url == null) {
 			if (other.url != null)
 				return false;
@@ -105,10 +118,8 @@ public class LinkVO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "LinkVO [method=" + method + ", contentType=" + contentType + ", url=" + url + ", links=" + links
-				+ ", objectRequestExample=" + objectRequestExample + ", objectResponseExample=" + objectResponseExample
-				+ "]";
+		return "LinkVO [rel=" + rel + ", method=" + method + ", contentType=" + contentType + ", url=" + url
+				+ ", links=" + links + ", objectRequestExample=" + objectRequestExample + ", objectResponseExample="
+				+ objectResponseExample + "]";
 	}
-
-	
 }

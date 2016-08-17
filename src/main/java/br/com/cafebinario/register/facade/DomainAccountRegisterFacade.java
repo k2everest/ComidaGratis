@@ -1,6 +1,7 @@
 package br.com.cafebinario.register.facade;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import br.com.cafebinario.register.vo.domain.NewDomainVO;
 import br.com.cafebinario.register.vo.result.ResultVO;
 import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
 import br.com.cafebinario.register.vo.result.domain.DomainListResultVO;
+import br.com.cafebinario.register.vo.result.hateos.NavigationVO;
 import br.com.cafebinario.util.HTMLUtil;
 
 @Service
@@ -55,7 +57,7 @@ public class DomainAccountRegisterFacade {
 	@Autowired
 	private EventNotifyDataEventListener eventNotifyDataEventListener;
 	
-	public DomainListResultVO lisDomains(PageVO pageVO) {
+	public List<NewDomainVO> lisDomains(PageVO pageVO) {
 
 		final List<DomainAccount> userList = findLastTenDomainRules.apply(pageVO);
 		final List<NewDomainVO> domainVOList = new ArrayList<>(userList.size());
@@ -65,21 +67,14 @@ public class DomainAccountRegisterFacade {
 			domainVOList.add(userVO);
 		});
 
-		return new DomainListResultVO(ResultVOBuilder.SUCCESS(), domainVOList, pageVO.getPageNumber() == 1 ? countDomainsRules.get() : null);
+		return domainVOList;
 	}
 
 	@Transactional
-	public ResultVO newDomain(final NewDomainVO domainVO) {
-		try {
-			final DomainAccount domain = createDomainRules.apply(domainVO);
-			persist(domain);
-			notify(domain);
-			return ResultVOBuilder.SUCCESS();
-		} catch (VerifyExistUserException e) {
-			return ResultVOBuilder.ERROR_USER_HAS_EXIST();
-		} catch (NotifyException e) {
-			return ResultVOBuilder.ERROR_SEND_SECURE_KEY();
-		}
+	public void newDomain(final NewDomainVO domainVO) {
+		final DomainAccount domain = createDomainRules.apply(domainVO);
+		persist(domain);
+		notify(domain);
 	}
 
 	private void persist(DomainAccount domain) {
@@ -96,5 +91,9 @@ public class DomainAccountRegisterFacade {
 		
 		eventNotifyTopic.addMessageListener(eventNotifyDataEventListener);
 		eventNotifyTopic.publish(eventNotifyData);
+	}
+
+	public Long countDomainsRules() {
+		return countDomainsRules.get();
 	}
 }

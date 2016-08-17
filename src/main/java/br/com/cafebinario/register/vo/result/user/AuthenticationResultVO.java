@@ -18,7 +18,7 @@ public class AuthenticationResultVO implements Serializable {
 	private final String token;
 
 	public AuthenticationResultVO(final String token) {
-		this.result = ResultVOBuilder.SUCCESS();
+		this.result = ResultVOBuilder.SUCCESS(null);
 		this.token = token;
 	}
 

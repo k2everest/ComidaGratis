@@ -6,12 +6,13 @@ import java.util.List;
 
 import br.com.cafebinario.register.vo.result.ResultVO;
 import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
+import br.com.cafebinario.register.vo.result.hateos.NavigationVO;
 
 public class FlowLinkVO implements Serializable {
 
 	private static final long serialVersionUID = 8364503629694145678L;
 
-	private final ResultVO result = ResultVOBuilder.SUCCESS();
+	private final ResultVO result = ResultVOBuilder.SUCCESS(Arrays.asList(new NavigationVO("", "", "")));
 	private final List<LinkVO> links;
 
 	public FlowLinkVO(final List<LinkVO> links) {

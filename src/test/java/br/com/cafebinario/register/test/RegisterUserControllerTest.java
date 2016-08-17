@@ -1,5 +1,7 @@
 package br.com.cafebinario.register.test;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,12 +50,11 @@ public class RegisterUserControllerTest {
 
 	@Test
 	public void registerSUCCESS() {
-		BDDMockito.given(this.registerFacade.newUser(userVO)).willReturn(ResultVOBuilder.SUCCESS());
+		BDDMockito.doNothing().when(this.registerFacade).newUser(userVO);
 
 		ResponseEntity<ResultVO> resultVONewUser = testRestTemplate.postForEntity("/user/new", this.userVO,
 				ResultVO.class);
 		Assert.assertEquals(resultVONewUser.getStatusCode(), HttpStatus.OK);
-		Assert.assertEquals(resultVONewUser.getBody(), ResultVOBuilder.SUCCESS());
 	}
 
 	@Test
@@ -64,13 +65,12 @@ public class RegisterUserControllerTest {
 
 	@Test
 	public void lastedTenSUCCESS() throws ConfirmUserException {
-		BDDMockito.given(this.registerFacade.lastTen()).willReturn(userListResultVO);
+		BDDMockito.given(this.registerFacade.lastTen()).willReturn(userListResultVO.getUserList());
 
 		ResponseEntity<UserListResultVO> resultVOLastTen = testRestTemplate.getForEntity("/user/lastTen",
 				UserListResultVO.class);
 
 		Assert.assertEquals(HttpStatus.OK, resultVOLastTen.getStatusCode());
-		Assert.assertEquals(ResultVOBuilder.SUCCESS(), resultVOLastTen.getBody().getResult());
 		Assert.assertEquals(userListResultVO.getUserList(), resultVOLastTen.getBody().getUserList());
 	}
 }
