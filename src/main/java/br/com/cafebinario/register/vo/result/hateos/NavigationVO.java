@@ -9,6 +9,10 @@ public class NavigationVO implements Serializable {
 	private String method;
 	private String rel;
 	private String href;
+	
+	public NavigationVO(){
+		
+	}
 
 	public NavigationVO(String method, String rel, String href) {
 		super();

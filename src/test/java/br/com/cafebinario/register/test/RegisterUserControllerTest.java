@@ -1,7 +1,5 @@
 package br.com.cafebinario.register.test;
 
-import java.util.ArrayList;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +20,6 @@ import br.com.cafebinario.main.Main;
 import br.com.cafebinario.register.config.JUnitConfig;
 import br.com.cafebinario.register.facade.UserAccountRegisterFacade;
 import br.com.cafebinario.register.vo.result.ResultVO;
-import br.com.cafebinario.register.vo.result.builder.ResultVOBuilder;
 import br.com.cafebinario.register.vo.result.user.UserListResultVO;
 import br.com.cafebinario.register.vo.user.NewUserVO;
 
